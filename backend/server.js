@@ -2,6 +2,7 @@ const express= require('express')
 require('dotenv').config();
 const app= express()
 const aiRoutes= require('./src/ai.route')
+app.use(express.json())
 app.get('/',(req,res)=>{
 res.send("welcom to ai")
 })
