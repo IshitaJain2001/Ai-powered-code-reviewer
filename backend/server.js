@@ -1,5 +1,7 @@
-const express= require('express')
 require('dotenv').config();
+
+const express= require('express')
+
 const app= express()
 const aiRoutes= require('./src/ai.route')
 app.use(express.json())
