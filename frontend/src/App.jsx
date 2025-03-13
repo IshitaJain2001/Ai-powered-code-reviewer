@@ -1,83 +1,3 @@
-// import { useEffect, useState } from "react"
-// import "prismjs/themes/prism-tomorrow.css"
-// import Editor from 'react-simple-code-editor'
-// import prism from "prismjs"
-
-
-// function App() {
-
-//   const [code,setCode]= useState(`
-  
-//     function sum(){
-//     return 1+1
-//     }`)
-
-//     const [reviews, setReviews]= useState(null)
-// useEffect(()=>{
-//   prism.highlightAll()
-// },[code])
-
-// async function getReviews(){
-
-//   try {
-    
-//     let res=await  fetch('http://localhost:3000/ai/get-data',{
-//       method:'POST'
-//     })
-//   if(res.ok){
-//     const data= await res.json()
-//   setReviews(data)
-//   }
-//   else{
-//   console.error("error:", res.statusText)
-//   }
-//   } catch (error) {
-//     console.error("Error:", error); 
-//   }
-
-// }
-
-// useEffect(()=>{
-//   getReviews()
-// },[])
-//   return (    
-//     <>
-//      <main>
-//       <div className="left">
-
-//         <div className="code">
-// <Editor
-// value={code}
-// onValueChange={code =>setCode(code)}
-// highlight={code=>prism.highlight(code,prism.languages.javascript,"javascript")}
-
-// style={{
-// border:"1px solid #ddd",
-// borderRadius:"5px",
-// fontSize:16,
-// height:"100%", 
-// width:"100%",
-// paddingBottom:"30px"
-// }}
-// />
-//         </div>
-//         <div className="review">Review</div>
-//       </div>
-//       <div className="right">
-//       {reviews ? (
-//     <pre>{JSON.stringify(reviews, null, 2)}</pre> // Yeh JSON ko pretty-print karega
-//   ) : (
-//     <p>Loading reviews...</p> // Jab tak reviews nahi aate, loading message dikhaye
-//   )}
-//       </div>
-//      </main>
-   
-//     </>
-//   )
-// }
-
-// export default App
-
 
 
 import { useEffect, useState } from "react";
@@ -102,11 +22,15 @@ function App() {
     try {
       let res = await fetch("http://localhost:3000/ai/get-data", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ code: code }),
       });
 
       if (res.ok) {
         const data = await res.json();
-        setReviews(data);
+        setReviews(data.result);
       } else {
         console.error("Error:", res.statusText);
       }
