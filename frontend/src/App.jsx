@@ -1,5 +1,6 @@
 
 
+
 import { useEffect, useState } from "react";
 import "prismjs/themes/prism-tomorrow.css";
 import Editor from "react-simple-code-editor";
@@ -11,14 +12,15 @@ function App() {
       return 1 + 1;
     }
   `);
-
   const [reviews, setReviews] = useState(null);
+  const [loading, setLoading] = useState(false); // Loading state for better UX
 
   useEffect(() => {
     prism.highlightAll();
   }, [code]);
 
   async function getReviews() {
+    setLoading(true);
     try {
       let res = await fetch("http://localhost:3000/ai/get-data", {
         method: "POST",
@@ -36,12 +38,10 @@ function App() {
       }
     } catch (error) {
       console.error("Error:", error);
+    } finally {
+      setLoading(false);
     }
   }
-
-  useEffect(() => {
-    getReviews();
-  }, []);
 
   return (
     <>
@@ -58,18 +58,19 @@ function App() {
                 fontSize: 16,
                 height: "100%",
                 width: "100%",
-                paddingBottom: "30px",
-               // Optional: dark background for the editor
-                color: "#f5f5f5", // Optional: light text color for better contrast
+               paddingLeft:"50px",
+               paddingTop:"10px",
+                color: "#f5f5f5",
               }}
             />
           </div>
-          <div className="review">Review Section</div>
+          <button className="review" onClick={getReviews}>
+            {loading ? "Fetching..." : "Get Review"}
+          </button>
         </div>
         <div className="right">
-          {/* Show loading message until reviews are fetched */}
           {reviews === null ? (
-            <p>Loading reviews...</p>
+            <p>Click 'Get Review' to fetch AI response.</p>
           ) : (
             <pre>{JSON.stringify(reviews, null, 2)}</pre>
           )}
